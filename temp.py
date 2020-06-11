@@ -13,7 +13,8 @@ for _ in range(n):
 
 def twoPluses(grid):
     Plus = [1]*2
-    Except = [-1,-1]
+    Except = [-1, -1]
+
     def multi(list):
         multi = 1
         for i in list:
@@ -47,39 +48,47 @@ def twoPluses(grid):
             time -= 2
     # Tim khoang G doc nhieu nhat
 
-    def colString(i, j, state):
-        string = grid[i][j]
+    def colString(i, j):
         
+
+        string = grid[i][j]
+
         back = i-1
         forw = i+1
         while True:
-            if back < 0 or forw >= n or j == state:
+            if back < 0 or forw >= n:
                 return string
             if grid[back][j] == 'G' and grid[forw][j] == 'G':
-                grid[back][j].lower()
-                grid[forw][j].lower()
                 string += grid[back][j] + grid[forw][j]
                 back -= 1
                 forw += 1
+                if back >= 0 and forw < n:
+                    if grid[back][j] == '-' or grid[forw][j] == '-':
+                        string += grid[back][j] + grid[forw][j]
+                        back -= 1
+                        forw += 1
             else:
                 return string
         return string
     # Tim Khoang G nganh nhieu nhat
 
-    def rowString(i, j, state):
+    def rowString(i, j):
         string = grid[i][j]
-
         back = j-1
         forw = j+1
+            
         while True:
-            if back < 0 or forw >= n or i == state:
+            if back < 0 or forw >= m:
                 return string
             if grid[i][back] == 'G' and grid[i][forw] == 'G':
-                grid[i][back].lower()
-                grid[i][forw].lower()
                 string += grid[i][back] + grid[i][forw]
                 back -= 1
                 forw += 1
+                if back >= 0 and forw < n:
+                    if grid[i][back] == '|' or grid[i][forw] == '|':
+                        string += grid[i][back] + grid[i][forw]
+                        back -= 1
+                        forw += 1
             else:
                 return string
         return string
@@ -89,8 +98,8 @@ def twoPluses(grid):
             if grid[i][j] == 'G':
                 #forwC,backC,stringCol = colString(i, j, Except[0])
                 #forwR,backR,stringRow = rowString(i, j, Except[1])
-                stringCol = len(colString(i,j,Except[1]))
-                stringRow = len(rowString(i,j,Except[0]))
+                stringCol = len(colString(i, j))
+                stringRow = len(rowString(i, j))
                 if stringCol % 2 != 0 and stringRow % 2 != 0:
                     Sum = min(stringCol, stringRow)*2-1
                     index = Plus.index(min(Plus))
@@ -100,8 +109,8 @@ def twoPluses(grid):
                         #ExceptR = [forwR,backC]
                         # Danh dau khoang da xet
                         # de khong xet lai diem da xet
-                        #flagStringcol(i, j, (Sum//2)+1)
-                        #flagStringrow(i, j, (Sum//2)+1)
+                        flagStringcol(i, j, (Sum//2)+1)
+                        flagStringrow(i, j, (Sum//2)+1)
     Multi = multi(Plus)
     return Multi
 
